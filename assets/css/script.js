@@ -3,6 +3,8 @@ class Calculator {
         this.previousOutput = previousOutput;
         this.currentOutput = currentOutput;
         this.previousAnswer = 0;
+        // this variable for making sure only 1 dot in number
+        this.isDotExisted = false;
         this.clear();
     }
     clear() {
@@ -22,9 +24,14 @@ class Calculator {
 
         if (!isNaN(character) || character == ".") {
             // isNaN -> is not a number
+            if (character == "." && this.isDotExisted)
+                return;
+            else if (character == "." && !this.isDotExisted)
+                this.isDotExisted = true;
             this.currentOutput.innerText += character;
         }
         else if (line.charAt(line.length - 1) != " ") {
+            if (this.isDotExisted) this.isDotExisted = false;
             if (line.length == 0)
                 this.currentOutput.innerText = (checkIsAns? this.previousAnswer : '0') + ' ' + character + ' ';    
             else
@@ -37,8 +44,10 @@ class Calculator {
         let charCheck = line.charAt(line.length - 2);
         if (line == "0" || line.length == "1" || line.startsWith("A"))
             this.clear();
-        else if (!isNaN(charCheck) || charCheck == ".")
+        else if (!isNaN(charCheck) || charCheck == ".") {
             this.currentOutput.innerText = line.substring(0, line.length - 1);
+            if (charCheck == ".") this.isDotExisted = false;
+        }
         else {
             this.currentOutput.innerText = line.substring(0, line.length - 3);
         }
@@ -65,9 +74,14 @@ class Calculator {
             arr = line.split(" ");
             // display math operation
             line = line.replaceAll(". ", ".0 ");
-            if (line.endsWith("."))
+            if (line.endsWith(".") && line.startsWith("."))
+                line = "0" + line.substring(0, line.length - 1) + ".0";
+            else if (line.endsWith("."))
                 line = line.substring(0, line.length - 1) + ".0";
-            console.log(line);
+            else if (line.startsWith("."))
+                line = "0" + line;
+
+            
             this.previousOutput.innerText = line + " =";
 
             let start = arr[0];
@@ -78,6 +92,7 @@ class Calculator {
 
             this.previousAnswer = start;
             this.currentOutput.innerText = "Ans = " + start;
+            this.isDotExisted = false;
         }
 
     }

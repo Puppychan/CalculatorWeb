@@ -60,11 +60,13 @@ body {
     justify-content: space-around;
     flex-direction: column;
 
-    padding: 10px;
+    /* padding: 10px; */
+    border: 10px solid var(--screen-background);
 
-    word-wrap: break-word;
-    word-break: break-all;
-    
+    /* word-wrap: break-word;
+    word-break: break-all; */
+    overflow: hidden;
+
     background-color: var(--screen-background);
 }
 .calc__output-prev {
